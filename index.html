@@ -4,89 +4,109 @@
     <meta charset="UTF-8">
     <title>Ben Senden Vazgeçmem</title>
     <style>
-        :root { --bordo: #4a0414; --altin: #d4af37; }
-        body { background-color: var(--bordo); color: #f4e7d3; font-family: 'Georgia', serif; margin: 0; padding: 20px; }
-        h2 { color: var(--altin); text-align: center; }
+        :root { --bordo: #4a0414; --altin: #d4af37; --koyu-bordo: #2d020c; }
+        body { background-color: var(--bordo); color: #f4e7d3; font-family: 'Georgia', serif; margin: 0; padding: 20px; text-align: center; }
+        h2 { color: var(--altin); border-bottom: 2px solid var(--altin); display: inline-block; padding: 5px 20px; margin-top: 50px; font-family: 'Cinzel', serif; }
         
-        /* GÜN SAYACI */
-        .counter-box { border: 2px solid var(--altin); padding: 20px; text-align: center; margin: 20px auto; max-width: 300px; }
-        
-        /* FOTO GALERİ */
-        .foto-slider { display: flex; overflow-x: auto; gap: 10px; padding: 20px 0; }
-        .foto-slider img { height: 300px; border: 2px solid var(--altin); }
+        /* Galeri ve Videolar */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        img, video { width: 100%; height: 200px; object-fit: cover; border: 2px solid var(--altin); border-radius: 8px; transition: transform 0.3s; }
+        img:hover { transform: scale(1.05); }
 
-        /* YAPBOZ */
-        .puzzle-board { display: grid; grid-template-columns: repeat(3, 100px); gap: 2px; margin: 20px auto; width: 300px; }
-        .puzzle-piece { width: 100px; height: 100px; background-size: 300px 300px; cursor: pointer; border: 1px solid #000; }
+        /* Yapboz */
+        #puzzle-board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; margin: 30px auto; }
+        .puzzle-piece { width: 100px; height: 100px; background-image: url('IMG_20260701_211244.jpg'); background-size: 300px 300px; border: 1px solid var(--altin); cursor: pointer; }
+        .selected { border: 3px solid white; box-shadow: 0 0 10px white; }
 
-        /* VİDEO */
-        .video-container { text-align: center; margin: 20px 0; }
-        video { width: 100%; max-width: 400px; border: 2px solid var(--altin); }
-
-        /* PLAK VE SÖZLER */
-        .vinyl { width: 150px; height: 150px; background: black; border-radius: 50%; margin: 20px auto; animation: spin 4s linear infinite; border: 10px solid #333; }
+        /* Müzik ve Şarkı Sözü */
+        .vinyl { width: 150px; height: 150px; background: #000; border-radius: 50%; margin: 30px auto; border: 10px solid #333; animation: spin 4s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .lyrics { text-align: center; font-style: italic; margin-top: 10px; line-height: 1.6; }
+        .lyrics { font-style: italic; font-size: 1.2em; line-height: 1.8; margin-bottom: 40px; }
 
-        /* ŞARAP VE ŞİİR */
-        details { border: 1px solid var(--altin); padding: 10px; margin: 20px auto; max-width: 400px; cursor: pointer; }
-        
-        /* DAİRE KOLYE */
-        .locket { width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; position: relative; overflow: hidden; cursor: pointer; border: 3px solid var(--altin); }
-        .locket img { width: 150px; height: 150px; object-fit: cover; }
+        /* Şarap ve Şiir */
+        .poem-section { background: var(--koyu-bordo); padding: 20px; border: 1px solid var(--altin); margin: 20px auto; max-width: 500px; border-radius: 10px; cursor: pointer; }
+        #siir-text { display: none; margin-top: 15px; white-space: pre-line; text-align: left; }
+
+        /* Daire Kolye */
+        .locket { width: 150px; height: 150px; border-radius: 50%; border: 5px solid var(--altin); margin: 30px auto; cursor: pointer; background: url('IMG_20260701_205240.jpg') center/cover; }
     </style>
 </head>
 <body>
 
-    <h2 id="baslik">Bizim Hikayemiz</h2>
-    <div class="counter-box">
-        <span id="days">0</span> gündür beraberiz...
+    <audio id="bgMusic" loop src="sarki.mp3"></audio>
+
+    <h2>Anılarımız</h2>
+    <div class="grid-container">
+        <img src="IMG_20260701_211244.jpg"><img src="IMG_20260701_205730.jpg"><img src="IMG_20260701_205424.jpg">
+        <img src="IMG_20260701_205258.jpg"><img src="IMG_20260701_205332.jpg"><img src="IMG_20260701_205240.jpg">
+        <img src="IMG_20260701_205225.jpg"><img src="IMG_20260701_205204.jpg"><img src="IMG_20260701_205150.jpg">
+        <img src="IMG_20260701_205134.jpg"><img src="IMG_20260701_205119.jpg"><img src="IMG_20260701_205110.jpg">
+        <img src="IMG_20260701_205054.jpg"><img src="IMG_20260701_205037.jpg">
     </div>
 
-    <div class="foto-slider">
-        <img src="IMG_20260701_211244.jpg">
-        <img src="IMG_20260701_205730.jpg">
-        <img src="IMG_20260701_205424.jpg">
-    </div>
+    <h2>Bizi Birleştir</h2>
+    <div id="puzzle-board"></div>
 
-    <h2 style="font-size: 18px;">Bizi Birleştir</h2>
-    <div class="puzzle-board" id="puzzle"></div>
-
-    <div class="video-container">
-        <video controls src="VID_20260701_205618.mp4"></video>
+    <h2>Videolarımız</h2>
+    <div class="grid-container">
+        <video controls src="VID_20260701_205618.mp4"></video><video controls src="VID_20260701_204945.mp4"></video>
+        <video controls src="VID_20260701_204911.mp4"></video><video controls src="VID_20260701_204729.mp4"></video>
+        <video controls src="VID_20260701_204642.mp4"></video><video controls src="VID_20260701_204520.mp4"></video>
+        <video controls src="VID_20260701_204416.mp4"></video><video controls src="VID_20260701_204301.mp4"></video>
+        <video controls src="VID_20260701_204221.mp4"></video><video controls src="VID_20260701_204140.mp4"></video>
+        <video controls src="VID_20260701_203914.mp4"></video><video controls src="VID_20260701_204107.mp4"></video>
+        <video controls src="VID_20260701_204026.mp4"></video><video controls src="VID_20260701_203848.mp4"></video>
+        <video controls src="VID_20260701_203743.mp4"></video><video controls src="VID_20260701_203635.mp4"></video>
+        <video controls src="VID-20250920-WA0101.mp4"></video>
     </div>
 
     <div class="vinyl"></div>
     <div class="lyrics">
-        Ben senden vazgeçmem<br>Işıkları söndürseler bile<br>Korkuma yenilmem<br>Ben sensiz pes etmem
+        Ben senden vazgeçmem<br>Işıkları söndürseler bile<br>Korkuma yenilmem<br>Ellerim, kollarım tutmasın isterse<br>Ben sensiz pes etmem
     </div>
 
-    <details>
-        <summary style="font-size: 30px; text-align: center;">🍷</summary>
-        <p style="white-space: pre-line;">
+    <div class="poem-section" onclick="document.getElementById('siir-text').style.display='block'">
+        <div style="font-size: 40px;">🍷</div>
+        <div id="siir-text">
             Maruzatım odur ki; en iyi bir dostsun
             Dağların doruğunda bir çiçek kadar iyi
             Sen karanlıkta yüzümüzü ağartan ışık...
-        </p>
-    </details>
-
-    <div class="locket" onclick="this.innerHTML='<img src=\'IMG_20260701_205240.jpg\'>'">
-        <div style="text-align: center; padding-top: 50px;">TIKLA</div>
+            
+            Bir gece habersiz bize gel
+            Merdivenler gıcırdamasın
+            Öyle yorgunum ki hiç sorma
+            Sen halimden anlarsın.
+        </div>
     </div>
 
-    <script>
-        // GÜN SAYACI
-        const date = Math.floor((new Date() - new Date('2022-09-17')) / (1000 * 60 * 60 * 24));
-        document.getElementById('days').innerText = date;
+    <h2>Sonsuza Dek</h2>
+    <div class="locket" onclick="this.style.backgroundImage='url(\'IMG_20260701_205134.jpg\')'"></div>
 
-        // YAPBOZ
-        const puzzle = document.getElementById('puzzle');
+    <script>
+        // Müzik Oynatma (Ekrana ilk tıklamada başlar)
+        document.body.addEventListener('click', () => {
+            const music = document.getElementById('bgMusic');
+            if(music.paused) music.play();
+        }, { once: true });
+
+        // Yapboz
+        const board = document.getElementById('puzzle-board');
+        let selected = null;
         for(let i=0; i<9; i++) {
-            let div = document.createElement('div');
-            div.className = 'puzzle-piece';
-            div.style.backgroundImage = 'url(IMG_20260701_211244.jpg)';
-            div.style.backgroundPosition = `-${(i%3)*100}px -${Math.floor(i/3)*100}px`;
-            puzzle.appendChild(div);
+            let p = document.createElement('div');
+            p.className = 'puzzle-piece';
+            p.style.backgroundPosition = `-${(i%3)*100}px -${Math.floor(i/3)*100}px`;
+            p.onclick = function() {
+                if(!selected) { selected = this; this.classList.add('selected'); }
+                else {
+                    let temp = selected.style.backgroundPosition;
+                    selected.style.backgroundPosition = this.style.backgroundPosition;
+                    this.style.backgroundPosition = temp;
+                    selected.classList.remove('selected');
+                    selected = null;
+                }
+            };
+            board.appendChild(p);
         }
     </script>
 </body>
