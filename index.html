@@ -58,12 +58,9 @@ body{
     }
 }
 <section class="cinema">
-
-    <video id="cinemaPlayer"
-           autoplay
-           muted
-           playsinline>
-    </video>
+    <video id="cinemaPlayer" muted playsinline></video>
+</section>
+    
 <audio id="music" loop>
     <source src="sarki.mp3">
 </audio>
@@ -108,19 +105,20 @@ body{
     box-shadow:0 0 30px crimson;
 }
 
-/* videolar */
-.videos{
+.cinema{
     display:flex;
-    gap:20px;
-    overflow-x:auto;
-    padding:30px;
+    justify-content:center;
+    padding:40px;
 }
 
-.videos video{
-    width:420px;
+#cinemaPlayer{
+    width:90%;
+    max-width:900px;
     aspect-ratio:16/9;
     border-radius:20px;
-}
+    box-shadow:0 0 40px rgba(255,0,80,.4);
+    transition:opacity 1s;
+        }
 
 /* plak */
 .record{
@@ -465,54 +463,6 @@ Sen benim en büyük zenginliğimsin."
 
 </section>
 
-
-<!-- Labirent -->
-<section style="padding:50px;text-align:center;">
-
-<h2>🌀 Labirent</h2>
-
-<div style="
-width:320px;
-height:320px;
-margin:auto;
-border:3px solid #fff;
-border-radius:20px;
-background:#300;
-position:relative;
-overflow:hidden;">
-
-<img src="IMG_20260701_205240.jpg"
-style="
-width:60px;
-height:60px;
-border-radius:50%;
-position:absolute;
-top:10px;
-left:10px;">
-
-<img src="IMG_20260701_205730.jpg"
-style="
-width:60px;
-height:60px;
-border-radius:50%;
-position:absolute;
-bottom:10px;
-right:10px;">
-
-</div>
-
-<p style="margin-top:20px">
-Başlangıçtan sana ulaşmak ❤️
-</p>
-<section class="maze-section">
-
-    <h2>🌀 Sana Ulaşmak</h2>
-
-    <canvas id="maze" width="420" height="420"></canvas>
-
-    <p id="mazeText">
-        Yön tuşlarıyla bana ulaş ❤️
-    </p>
 </section>
 </section>
 
