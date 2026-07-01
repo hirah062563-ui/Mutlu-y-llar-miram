@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ben Senden Vazgeçmem</title>
+    <style>
+        /* GENEL TEMA VE SİNEMATİK ESTETİK */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@500;700&display=swap');
+        
+        :root {
+            --bordo: #4a0414;
+            --altin: #d4af37;
+            --koyu-bordo: #2d020c;
+        }
+
+        body {
+            background-color: var(--bordo);
+            color: #f4e7d3;
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* FİLM GRENİ EFEKTİ (Eski sinema havası) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--altin); text-align: center; margin-top: 40px;}
+
+        /* SİNEMATİK GİRİŞ EKRANI */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 2s ease;
+        }
+        .play-btn {
+            background: transparent;
+            border: 2px solid var(--altin);
+            color: var(--altin);
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            padding: 15px 40px;
+            cursor: pointer;
+            border-radius: 5px;
+            letter-spacing: 3px;
+            transition: all 0.5s;
+        }
+        .play-btn:active { background: var(--altin); color: #000; }
+
+        /* ANA İÇERİK */
+        #main-content {
+            display: none;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        /* GÜN SAYACI */
+        .counter-box {
+            border: 1px solid var(--altin);
+            padding: 20px;
+            text-align: center;
+            margin: 30px auto;
+            max-width: 300px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+        .counter-box span { font-size: 32px; font-weight: bold; color: var(--altin); }
+
+        /* FİLM ŞERİDİ (GALERİ) */
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            margin: 40px 0;
+        }
+        .film-frame {
+            background: #111;
+            padding: 15px 15px 45px 15px;
+            border: 1px solid #333;
+            box-shadow: 2px 2px 15px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .film-frame::after {
+            content: "♥";
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            color: var(--altin);
+            font-size: 20px;
+        }
+        .foto-3-4 { width: 270px; aspect-ratio: 3/4; object-fit: cover; }
+        .video-16-9 { width: 320px; aspect-ratio: 16/9; object-fit: cover; }
+
+        /* YAPBOZ OYUNU */
+        .puzzle-container { margin: 40px auto; text-align: center; }
+        #puzzle-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 2px;
+            margin: 0 auto;
+            width: 304px;
+            background: var(--altin);
+            padding: 2px;
+        }
+        .puzzle-piece {
+            width: 100px; height: 100px;
+            background-size: 300px 300px;
+            cursor: pointer;
+        }
+        .selected-piece { filter: brightness(1.5); }
+
+        /* PLAK (VİNYL) */
+        .vinyl-container { text-align: center; margin: 60px 0; }
+        .vinyl {
+            width: 150px; height: 150px;
+            background: #111;
+            border-radius: 50%;
+            margin: 0 auto;
+            border: 4px solid #333;
+            position: relative;
+            animation: spin 4s linear infinite;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .vinyl::after {
+            content: ""; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 50px; height: 50px; background: var(--bordo);
+            border-radius: 50%; border: 2px solid var(--altin);
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .lyrics { margin-top: 20px; font-style: italic; color: #f4e7d3; line-height: 1.8; text-align: center;}
+
+        /* ŞARAP VE ŞİİRLER */
+        .wine-section { text-align: center; margin: 60px 0; }
+        .wine-icon { font-size: 50px; cursor: pointer; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .poem-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-top: 1px solid var(--altin);
+            border-bottom: 1px solid var(--altin);
+            background: rgba(0,0,0,0.2);
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        /* YATAY KAYDIRMALI SÖZLER */
+        .quotes-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            padding: 20px;
+            margin: 40px 0;
+        }
+        .quotes-carousel::-webkit-scrollbar { display: none; }
+        .quote-card {
+            min-width: 280px;
+            background: var(--koyu-bordo);
+            border: 1px solid var(--altin);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 10px;
+            scroll-snap-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+        }
+
+        /* LABİRENT OYUNU */
+        .maze-container { text-align: center; margin: 40px auto; }
+        #maze {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-template-rows: repeat(5, 60px);
+            gap: 2px; margin: 0 auto; width: 310px; background: #000; padding: 2px;
+        }
+        .maze-cell { background: var(--koyu-bordo); width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; }
+        .wall { background: #000; }
+        .maze-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--altin); }
+        .maze-controls { margin-top: 15px; }
+        .maze-controls button { background: var(--altin); border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; font-weight: bold; font-size:18px;}
+
+        /* AÇILAN KALP KOLYE (LOCKET) */
+        .locket-section { text-align: center; margin: 80px 0; display: flex; justify-content: center;}
+        .locket {
+            width: 150px; height: 150px;
+            position: relative;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        .locket-half {
+            width: 50%; height: 100%;
+            position: absolute; top: 0;
+            background-color: var(--altin);
+            background-size: cover;
+            background-position: center;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            border: 2px solid #b58900;
+        }
+        .left-half { 
+            left: 0; transform-origin: left center; border-radius: 150px 0 0 150px;
+            background-image: url('kolye-sol.jpg'); /* SENİN FOTOĞRAFIN */
+        }
+        .right-half { 
+            right: 0; transform-origin: right center; border-radius: 0 150px 150px 0;
+            background-image: url('kolye-sag.jpg'); /* ONUN FOTOĞRAFI */
+        }
+        .locket-cover-left, .locket-cover-right {
+            position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #d4af37, #aa801b);
+            backface-visibility: hidden;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--bordo); font-size: 24px; font-family: 'Cinzel', serif;
+        }
+        .locket-cover-left { border-radius: 150px 0 0 150px; }
+        .locket-cover-right { border-radius: 0 150px 150px 0; }
+        
+        .locket.open .left-half { transform: rotateY(-180deg); }
+        .locket.open .right-half { transform: rotateY(180deg); }
+    </style>
+</head>
+<body>
+
+    <!-- ARKA PLAN MÜZİĞİ -->
+    <audio id="bg-music" loop>
+        <source src="sarki.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SİNEMA FRAGMANI GİRİŞİ -->
+    <div id="intro-screen">
+        <button class="play-btn" onclick="startExperience()">FİLMİ BAŞLAT</button>
+    </div>
+
+    <!-- ANA SİTE -->
+    <div id="main-content">
+        
+        <h2>Bizim Hikayemiz</h2>
+        <!-- GÜN SAYACI -->
+        <div class="counter-box">
+            <div>Tam</div>
+            <span id="days-counter">0</span>
+            <div>gündür hayatımdasın...</div>
+        </div>
+
+        <!-- 3:4 FOTOĞRAFLAR -->
+        <div class="gallery-container">
+            <div class="film-frame">
+                <img src="foto1.jpg" class="foto-3-4" alt="Fotoğraf 1">
+            </div>
+            <div class="film-frame">
+                <img src="foto2.jpg" class="foto-3-4" alt="Fotoğraf 2">
+            </div>
+        </div>
+
+        <!-- YAPBOZ OYUNU -->
+        <div class="puzzle-container">
+            <h2>Bizi Birleştir</h2>
+            <p style="font-size: 12px; margin-bottom: 15px;">Parçaların yerini değiştirmek için iki kareye sırayla dokun.</p>
+            <div id="puzzle-board"></div>
+        </div>
+
+        <!-- 16:9 VİDEOLAR -->
+        <div class="gallery-container">
+            <div class="film-frame">
+                <video src="video1.mp4" class="video-16-9" controls></video>
+            </div>
+        </div>
+
+        <!-- LABİRENT OYUNU -->
+        <div class="maze-container">
+            <h2>Bana Ulaş</h2>
+            <div id="maze"></div>
+            <div class="maze-controls">
+                <button onclick="movePlayer(0, -1)">↑</button><br>
+                <button onclick="movePlayer(-1, 0)">←</button>
+                <button onclick="movePlayer(0, 1)">↓</button>
+                <button onclick="movePlayer(1, 0)">→</button>
+            </div>
+        </div>
+
+        <!-- PLAK VE SÖZLER -->
+        <div class="vinyl-container">
+            <div class="vinyl"></div>
+            <div class="lyrics">
+                Ben senden vazgeçmem<br>
+                Işıkları söndürseler bile<br>
+                Korkuma yenilmem<br>
+                Ellerim, kollarım tutmasın isterse<br>
+                Ben sensiz pes etmem
+            </div>
+        </div>
+
+        <!-- ŞARAP SİMGESİ VE ŞİİRLER -->
+        <div class="wine-section">
+            <div class="wine-icon" onclick="togglePoems()">🍷</div>
+            <p style="font-size: 12px; opacity: 0.7;">İçelim...</p>
+            <div class="poem-content" id="poems">
+                Maruzatım odur ki;en iyi bir dostsun
+                Dağların doruğunda bir çiçek kadar iyi
+                Sen karanlıkta yüzümüzü ağartan ışık
+                Resimlerin duvarlarda şakır kuşlar gibi
+
+                Sen O'sun her zaman yalansız olan sevgisi
+                Saksıları sulayan,vazolara can katan
+                O en koyu,en çaresiz gecelerde bile
+                Yeri,göğü bir merhabasıyla aydınlatan
+
+                Sen O'sun sevince boğan bütün kederleri
+                Solan,kuruyan,bir çiçek gibi ağlayansın
+                Ve esen dost bir imbatsın akşamüzerleri
+
+                Kalan bir gün gibi yazdan,öyle Haziransın
+                Yalan değil,biz ne arayıp sende bulduksa
+                Mutluyuz,dostça gönül tahtına kurulduksa.
+                
+                ***
+
+                Bir gece habersiz bize gel
+                Merdivenler gıcırdamasın
+                Öyle yorgunum ki hiç sorma
+                Sen halimden anlarsın
+                Sabahlara kadar oturup konuşalım
+                Kimse duymasın
+                Mavi bir gökyüzümüz olsun kanatlarımız
+                Dokunarak uçalım.
+
+                İnsanlardan buz gibi soğudum,
+                işte yalnız sen varsın
+                Öyle halsizim ki hiç sorma
+                Anlarsın.
+            </div>
+        </div>
+
+        <!-- KAYDIRMALI KUTULAR -->
+        <div class="quotes-carousel">
+            <div class="quote-card">"Dost, senin eksik yanını tamamlayan değil; Fazlanı taşıyandır."</div>
+            <div class="quote-card">"Gerçek dost, yıldızlar gibidir; Karanlık çökünce varlığını daha iyi anlarsın."</div>
+            <div class="quote-card">"Gerçek dostluk çıkarla değil, yürekle olur. Sen bunun en güzel örneğisin aşkım"</div>
+            <div class="quote-card">"Bazı insanlar hayata gelir, bazıları ise hayat olur. Sen benim için ikincisisin."</div>
+            <div class="quote-card">"Herkes konuşur, gerçek dost sessizliğini bile anlayandır. Sen hep öyle oldun."</div>
+            <div class="quote-card">"İnsan servetiyle değil, yanında duran dostlarıyla zengindir. Sen benim en büyük zenginliğimsin herşeyimmmm"</div>
+        </div>
+
+        <!-- KALP KOLYE -->
+        <h2 style="margin-bottom: 5px;">Sonsuza Dek</h2>
+        <p style="text-align: center; font-size: 12px; margin-bottom: 20px;">Kolyeye dokun</p>
+        <div class="locket-section">
+            <div class="locket" onclick="this.classList.toggle('open')">
+                <div class="locket-half left-half">
+                    <div class="locket-cover-left">B</div> <!-- Baş harfinizi yazabilirsiniz -->
+                </div>
+                <div class="locket-half right-half">
+                    <div class="locket-cover-right">Z</div> <!-- Arkadaşının baş harfi -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT KODLARI -->
+    <script>
+        // SİNEMATİK GİRİŞ
+        function startExperience() {
+            document.getElementById('intro-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-screen').style.display = 'none';
+                let main = document.getElementById('main-content');
+                main.style.display = 'block';
+                setTimeout(() => main.style.opacity = '1', 50);
+            }, 2000);
+            document.getElementById('bg-music').play();
+        }
+
+        // GÜN SAYACI HESAPLAMA (Tarihi buradan ayarlayabilirsin)
+        const tanismaTarihi = new Date('2022-09-17'); // YILI KENDİ YILINIZA GÖRE DEĞİŞTİRİN
+        const bugun = new Date();
+        const fark = Math.floor((bugun - tanismaTarihi) / (1000 * 60 * 60 * 24));
+        document.getElementById('days-counter').innerText = fark;
+
+        // ŞİİR AÇMA
+        function togglePoems() {
+            let poems = document.getElementById('poems');
+            poems.style.display = (poems.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // YAPBOZ OYUNU MANTIĞI
+        const puzzleBoard = document.getElementById('puzzle-board');
+        let selectedPiece = null;
+        let puzzleImgUrl = 'yapboz.jpg'; // YAPBOZ YAPILACAK FOTOĞRAF
+        let positions = [0,1,2,3,4,5,6,7,8].sort(() => Math.random() - 0.5);
+
+        positions.forEach((pos, index) => {
+            let piece = document.createElement('div');
+            piece.className = 'puzzle-piece';
+            piece.style.backgroundImage = `url(${puzzleImgUrl})`;
+            let x = (pos % 3) * 33.33;
+            let y = Math.floor(pos / 3) * 33.33;
+            piece.style.backgroundPosition = `${x}% ${y}%`;
+            piece.dataset.pos = pos;
+            
+            piece.onclick = function() {
+                if(!selectedPiece) {
+                    selectedPiece = this;
+                    this.classList.add('selected-piece');
+                } else {
+                    // Swap background positions
+                    let tempBg = selectedPiece.style.backgroundPosition;
+                    selectedPiece.style.backgroundPosition = this.style.backgroundPosition;
+                    this.style.backgroundPosition = tempBg;
+                    
+                    let tempPos = selectedPiece.dataset.pos;
+                    selectedPiece.dataset.pos = this.dataset.pos;
+                    this.dataset.pos = tempPos;
+                    
+                    selectedPiece.classList.remove('selected-piece');
+                    selectedPiece = null;
+                }
+            };
+            puzzleBoard.appendChild(piece);
+        });
+
+        // LABİRENT OYUNU MANTIĞI
+        const mazeContainer = document.getElementById('maze');
+        let playerPos = {x: 0, y: 0};
+        const goalPos = {x: 4, y: 4};
+        // 0: Yol, 1: Duvar
+        const mazeLayout = [
+            [0, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1],
+            [0, 0, 0, 0, 1],
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 1, 0]
+        ];
+
+        function drawMaze() {
+            mazeContainer.innerHTML = '';
+            for(let y = 0; y < 5; y++) {
+                for(let x = 0; x < 5; x++) {
+                    let cell = document.createElement('div');
+                    cell.className = 'maze-cell';
+                    if(mazeLayout[y][x] === 1) cell.classList.add('wall');
+                    
+                    if(x === playerPos.x && y === playerPos.y) {
+                        cell.innerHTML = '<img src="arkadas.jpg" class="maze-img">'; // ONUN FOTOĞRAFI
+                    } else if(x === goalPos.x && y === goalPos.y) {
+                        cell.innerHTML = '<img src="ben.jpg" class="maze-img">'; // SENİN FOTOĞRAFIN
+                    }
+                    mazeContainer.appendChild(cell);
+                }
+            }
+            if(playerPos.x === goalPos.x && playerPos.y === goalPos.y) {
+                setTimeout(() => alert("Kavuştuk! ❤️"), 200);
+            }
+        }
+
+        function movePlayer(dx, dy) {
+            let newX = playerPos.x + dx;
+            let newY = playerPos.y + dy;
+            if(newX >= 0 && newX < 5 && newY >= 0 && newY < 5 && mazeLayout[newY][newX] === 0) {
+                playerPos.x = newX;
+                playerPos.y = newY;
+                drawMaze();
+            }
+        }
+        drawMaze();
+    </script>
+</body>
+  </html>
+  
