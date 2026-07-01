@@ -1,113 +1,577 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Ben Senden Vazgeçmem</title>
-    <style>
-        :root { --bordo: #4a0414; --altin: #d4af37; --koyu-bordo: #2d020c; }
-        body { background-color: var(--bordo); color: #f4e7d3; font-family: 'Georgia', serif; margin: 0; padding: 20px; text-align: center; }
-        h2 { color: var(--altin); border-bottom: 2px solid var(--altin); display: inline-block; padding: 5px 20px; margin-top: 50px; font-family: 'Cinzel', serif; }
-        
-        /* Galeri ve Videolar */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
-        img, video { width: 100%; height: 200px; object-fit: cover; border: 2px solid var(--altin); border-radius: 8px; transition: transform 0.3s; }
-        img:hover { transform: scale(1.05); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-        /* Yapboz */
-        #puzzle-board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; margin: 30px auto; }
-        .puzzle-piece { width: 100px; height: 100px; background-image: url('IMG_20260701_211244.jpg'); background-size: 300px 300px; border: 1px solid var(--altin); cursor: pointer; }
-        .selected { border: 3px solid white; box-shadow: 0 0 10px white; }
+<title>Bizim Hikayemiz ❤️</title>
 
-        /* Müzik ve Şarkı Sözü */
-        .vinyl { width: 150px; height: 150px; background: #000; border-radius: 50%; margin: 30px auto; border: 10px solid #333; animation: spin 4s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .lyrics { font-style: italic; font-size: 1.2em; line-height: 1.8; margin-bottom: 40px; }
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
-        /* Şarap ve Şiir */
-        .poem-section { background: var(--koyu-bordo); padding: 20px; border: 1px solid var(--altin); margin: 20px auto; max-width: 500px; border-radius: 10px; cursor: pointer; }
-        #siir-text { display: none; margin-top: 15px; white-space: pre-line; text-align: left; }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        /* Daire Kolye */
-        .locket { width: 150px; height: 150px; border-radius: 50%; border: 5px solid var(--altin); margin: 30px auto; cursor: pointer; background: url('IMG_20260701_205240.jpg') center/cover; }
-    </style>
+body{
+    background:linear-gradient(180deg,#220000,#4b0014,#220000);
+    color:white;
+    font-family:Poppins;
+    overflow-x:hidden;
+}
+
+/* Netflix giriş */
+.hero{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:
+    linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.9)),
+    url('IMG_20260701_205240.jpg');
+    background-size:cover;
+    background-position:center;
+}
+
+.hero h1{
+    font-size:60px;
+    letter-spacing:8px;
+    animation:fade 3s;
+}
+
+.hero p{
+    margin-top:20px;
+    opacity:.8;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:scale(.7);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* sayaç */
+.counter{
+    width:320px;
+    margin:40px auto;
+    padding:20px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 0 30px #ff0055;
+}
+
+.counter h2{
+    color:#ff7aa8;
+}
+
+/* fotoğraf galerisi */
+.gallery{
+    display:flex;
+    overflow-x:auto;
+    gap:20px;
+    padding:30px;
+    scroll-snap-type:x mandatory;
+}
+
+.gallery img{
+    width:240px;
+    height:320px;
+    object-fit:cover;
+    border-radius:20px;
+    scroll-snap-align:center;
+    transition:.4s;
+}
+
+.gallery img:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 30px crimson;
+}
+
+/* videolar */
+.videos{
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    padding:30px;
+}
+
+.videos video{
+    width:420px;
+    aspect-ratio:16/9;
+    border-radius:20px;
+}
+
+/* plak */
+.record{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    margin:auto;
+    background:
+    radial-gradient(circle,#222 20%,#000 22%,#333 50%,#000);
+    animation:spin 8s linear infinite;
+}
+
+@keyframes spin{
+    from{transform:rotate(0)}
+    to{transform:rotate(360deg)}
+}
+
+.lyrics{
+    text-align:center;
+    margin:20px;
+    line-height:2;
+}
+
+/* söz kutuları */
+.quotes{
+    display:flex;
+    overflow-x:auto;
+    gap:20px;
+    padding:30px;
+}
+
+.quote{
+    min-width:280px;
+    background:#5a001a;
+    padding:25px;
+    border-radius:20px;
+}
+    /* SİNEMATİK INTRO */
+
+#intro{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100vh;
+    background:
+    linear-gradient(rgba(0,0,0,.8),
+    rgba(0,0,0,.95)),
+    url("IMG_20260701_205240.jpg");
+
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:99999;
+
+    animation:introEnd 8s forwards;
+}
+
+.overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:black;
+    opacity:.55;
+}
+
+.intro-text{
+    position:relative;
+    text-align:center;
+    color:white;
+    font-family:Cinzel;
+}
+
+.small{
+    font-size:18px;
+    letter-spacing:8px;
+    opacity:0;
+    animation:fadeUp 2s forwards;
+}
+
+.intro-text h1{
+    font-size:90px;
+    color:#b3002d;
+    letter-spacing:12px;
+    opacity:0;
+    animation:fadeUp 2s 1s forwards;
+}
+
+.intro-text h2{
+    margin-top:15px;
+    font-size:32px;
+    opacity:0;
+    animation:fadeUp 2s 2.5s forwards;
+}
+
+.desc{
+    margin-top:30px;
+    font-size:18px;
+    opacity:0;
+    animation:fadeUp 2s 4s forwards;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes introEnd{
+    0%,85%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+        visibility:hidden;
+    }
+    }
+</style>
 </head>
+
 <body>
 
-    <audio id="bgMusic" loop src="sarki.mp3"></audio>
+<!-- giriş -->
+<section class="hero">
+    <h1>OUR STORY</h1>
+    <p>Bir sinema fragmanı gibi başlayan hikayemiz ❤️</p>
+</section>
 
-    <h2>Anılarımız</h2>
-    <div class="grid-container">
-        <img src="IMG_20260701_211244.jpg"><img src="IMG_20260701_205730.jpg"><img src="IMG_20260701_205424.jpg">
-        <img src="IMG_20260701_205258.jpg"><img src="IMG_20260701_205332.jpg"><img src="IMG_20260701_205240.jpg">
-        <img src="IMG_20260701_205225.jpg"><img src="IMG_20260701_205204.jpg"><img src="IMG_20260701_205150.jpg">
-        <img src="IMG_20260701_205134.jpg"><img src="IMG_20260701_205119.jpg"><img src="IMG_20260701_205110.jpg">
-        <img src="IMG_20260701_205054.jpg"><img src="IMG_20260701_205037.jpg">
+<!-- gün sayacı -->
+<div class="counter">
+    <h2 id="days"></h2>
+    <p>17 Eylül'den beri birlikteyiz</p>
+</div>
+
+<!-- fotoğraflar -->
+<h2 style="padding:20px">📷 Fotoğraflarımız</h2>
+
+<div class="gallery">
+
+<img src="IMG_20260701_211244.jpg">
+<img src="IMG_20260701_205730.jpg">
+<img src="IMG_20260701_205424.jpg">
+<img src="IMG_20260701_205258.jpg">
+<img src="IMG_20260701_205332.jpg">
+<img src="IMG_20260701_205240.jpg">
+<img src="IMG_20260701_205225.jpg">
+<img src="IMG_20260701_205204.jpg">
+<img src="IMG_20260701_205150.jpg">
+<img src="IMG_20260701_205134.jpg">
+<img src="IMG_20260701_205119.jpg">
+<img src="IMG_20260701_205110.jpg">
+<img src="IMG_20260701_205054.jpg">
+<img src="IMG_20260701_205037.jpg">
+
+</div>
+
+<!-- videolar -->
+<h2 style="padding:20px">🎬 Videolarımız</h2>
+
+<div class="videos">
+
+<video controls src="VID_20260701_205618.mp4"></video>
+<video controls src="VID_20260701_204945.mp4"></video>
+<video controls src="VID_20260701_204911.mp4"></video>
+<video controls src="VID_20260701_204729.mp4"></video>
+<video controls src="VID_20260701_204642.mp4"></video>
+<video controls src="VID_20260701_204520.mp4"></video>
+
+</div>
+
+<!-- plak -->
+<div class="record"></div>
+
+<div class="lyrics">
+Ben senden vazgeçmem<br>
+Işıkları söndürseler bile<br>
+Korkuma yenilmem<br>
+Ellerim, kollarım tutmasın isterse<br>
+Ben sensiz pes etmem<br>
     </div>
 
-    <h2>Bizi Birleştir</h2>
-    <div id="puzzle-board"></div>
+<!-- Şarap ve şiirler -->
+<section style="padding:40px;text-align:center;">
 
-    <h2>Videolarımız</h2>
-    <div class="grid-container">
-        <video controls src="VID_20260701_205618.mp4"></video><video controls src="VID_20260701_204945.mp4"></video>
-        <video controls src="VID_20260701_204911.mp4"></video><video controls src="VID_20260701_204729.mp4"></video>
-        <video controls src="VID_20260701_204642.mp4"></video><video controls src="VID_20260701_204520.mp4"></video>
-        <video controls src="VID_20260701_204416.mp4"></video><video controls src="VID_20260701_204301.mp4"></video>
-        <video controls src="VID_20260701_204221.mp4"></video><video controls src="VID_20260701_204140.mp4"></video>
-        <video controls src="VID_20260701_203914.mp4"></video><video controls src="VID_20260701_204107.mp4"></video>
-        <video controls src="VID_20260701_204026.mp4"></video><video controls src="VID_20260701_203848.mp4"></video>
-        <video controls src="VID_20260701_203743.mp4"></video><video controls src="VID_20260701_203635.mp4"></video>
-        <video controls src="VID-20250920-WA0101.mp4"></video>
+    <h2>🍷 Dokun ve Oku</h2>
+
+    <div onclick="togglePoems()"
+         style="
+         font-size:70px;
+         cursor:pointer;
+         transition:.3s;">
+         🍷
     </div>
 
-    <div class="vinyl"></div>
-    <div class="lyrics">
-        Ben senden vazgeçmem<br>Işıkları söndürseler bile<br>Korkuma yenilmem<br>Ellerim, kollarım tutmasın isterse<br>Ben sensiz pes etmem
+    <div id="poems"
+         style="
+         display:none;
+         max-width:900px;
+         margin:auto;
+         text-align:left;
+         line-height:2;
+         background:rgba(255,255,255,.05);
+         padding:30px;
+         border-radius:20px;
+         margin-top:20px;">
+
+<h3>1. Maruzatım odur ki</h3>
+
+<p>
+Maruzatım odur ki; en iyi bir dostsun<br>
+Dağların doruğunda bir çiçek kadar iyi<br>
+Sen karanlıkta yüzümüzü ağartan ışık<br>
+Resimlerin duvarlarda şakır kuşlar gibi
+</p>
+
+<p>
+Sen O'sun her zaman yalansız olan sevgisi<br>
+Saksıları sulayan, vazolara can katan<br>
+O en koyu, en çaresiz gecelerde bile<br>
+Yeri, göğü bir merhabasıyla aydınlatan
+</p>
+
+<p>
+Sen O'sun sevince boğan bütün kederleri<br>
+Solan, kuruyan, bir çiçek gibi ağlayansın<br>
+Ve esen dost bir imbatsın akşamüzerleri
+</p>
+
+<p>
+Kalan bir gün gibi yazdan, öyle Haziransın<br>
+Yalan değil, biz ne arayıp sende bulduksa<br>
+Mutluyuz, dostça gönül tahtına kurulduksa.
+</p>
+
+<hr style="margin:30px 0">
+
+<h3>2. Bir gece habersiz bize gel</h3>
+
+<p>
+Bir gece habersiz bize gel<br>
+Merdivenler gıcırdamasın<br>
+Öyle yorgunum ki hiç sorma<br>
+Sen halimden anlarsın
+</p>
+
+<p>
+Sabahlara kadar oturup konuşalım<br>
+Kimse duymasın<br>
+Mavi bir gökyüzümüz olsun kanatlarımız<br>
+Dokunarak uçalım.
+</p>
+
+<p>
+İnsanlardan buz gibi soğudum,<br>
+İşte yalnız sen varsın<br>
+Öyle halsizim ki hiç sorma<br>
+Anlarsın.
+</p>
+
     </div>
 
-    <div class="poem-section" onclick="document.getElementById('siir-text').style.display='block'">
-        <div style="font-size: 40px;">🍷</div>
-        <div id="siir-text">
-            Maruzatım odur ki; en iyi bir dostsun
-            Dağların doruğunda bir çiçek kadar iyi
-            Sen karanlıkta yüzümüzü ağartan ışık...
-            
-            Bir gece habersiz bize gel
-            Merdivenler gıcırdamasın
-            Öyle yorgunum ki hiç sorma
-            Sen halimden anlarsın.
-        </div>
+</section>
+
+
+<!-- Kaydırmalı sözler -->
+<section>
+
+<h2 style="padding:20px">❤️ Sözler</h2>
+
+<div class="quotes">
+
+<div class="quote">
+"Dost, senin eksik yanını tamamlayan değil;
+fazlanı taşıyandır."
+</div>
+
+<div class="quote">
+"Gerçek dost, yıldızlar gibidir;
+karanlık çökünce varlığını daha iyi anlarsın."
+</div>
+
+<div class="quote">
+"Gerçek dostluk çıkarla değil,
+yürekle olur.
+Sen bunun en güzel örneğisin aşkım."
+</div>
+
+<div class="quote">
+"Bazı insanlar hayata gelir,
+bazıları ise hayat olur.
+Sen benim için ikincisisin."
+</div>
+
+<div class="quote">
+"Herkes konuşur,
+gerçek dost sessizliğini bile anlayandır.
+Sen hep öyle oldun."
+</div>
+
+<div class="quote">
+"İnsan servetiyle değil,
+yanında duran dostlarıyla zengindir.
+Sen benim en büyük zenginliğimsin."
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Labirent -->
+<section style="padding:50px;text-align:center;">
+
+<h2>🌀 Labirent</h2>
+
+<div style="
+width:320px;
+height:320px;
+margin:auto;
+border:3px solid #fff;
+border-radius:20px;
+background:#300;
+position:relative;
+overflow:hidden;">
+
+<img src="IMG_20260701_205240.jpg"
+style="
+width:60px;
+height:60px;
+border-radius:50%;
+position:absolute;
+top:10px;
+left:10px;">
+
+<img src="IMG_20260701_205730.jpg"
+style="
+width:60px;
+height:60px;
+border-radius:50%;
+position:absolute;
+bottom:10px;
+right:10px;">
+
+</div>
+
+<p style="margin-top:20px">
+Başlangıçtan sana ulaşmak ❤️
+</p>
+
+</section>
+
+
+<!-- Kalpli kolye -->
+<section style="
+padding:80px;
+text-align:center;">
+
+<h2>💖 Sonsuza Kadar</h2>
+
+<div style="
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;">
+
+<div style="
+width:160px;
+height:200px;
+background:#700018;
+border-radius:100px 100px 0 0;
+overflow:hidden;
+transform:rotate(-15deg);">
+
+<img src="IMG_20260701_205240.jpg"
+style="
+width:100%;
+height:100%;
+object-fit:cover;">
+</div>
+
+<div style="
+width:160px;
+height:200px;
+background:#700018;
+border-radius:100px 100px 0 0;
+overflow:hidden;
+transform:rotate(15deg);">
+
+<img src="IMG_20260701_205134.jpg"
+style="
+width:100%;
+height:100%;
+object-fit:cover;">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Müzik -->
+<audio autoplay loop>
+    <source src="music.mp3">
+</audio>
+
+
+<script>
+
+// gün sayacı
+const start = new Date("2025-09-17");
+const today = new Date();
+
+const diff =
+Math.floor(
+(today-start)/(1000*60*60*24)
+);
+
+document.getElementById("days").innerHTML =
+diff + " gündür beraberiz ❤️";
+
+
+// şiir aç kapa
+function togglePoems(){
+
+    const p =
+    document.getElementById("poems");
+
+    if(p.style.display==="block")
+        p.style.display="none";
+    else
+        p.style.display="block";
+}
+
+</script>
+<!-- SİNEMATİK GİRİŞ -->
+<div id="intro">
+
+    <div class="overlay"></div>
+
+    <div class="intro-text">
+        <p class="small">A TRUE STORY</p>
+
+        <h1>17 EYLÜL</h1>
+
+        <h2>Bir Dostluğun Hikayesi</h2>
+
+        <p class="desc">
+            Bazı insanlar hayata gelir...
+            Bazıları ise hayat olur.
+        </p>
     </div>
 
-    <h2>Sonsuza Dek</h2>
-    <div class="locket" onclick="this.style.backgroundImage='url(\'IMG_20260701_205134.jpg\')'"></div>
-
-    <script>
-        // Müzik Oynatma (Ekrana ilk tıklamada başlar)
-        document.body.addEventListener('click', () => {
-            const music = document.getElementById('bgMusic');
-            if(music.paused) music.play();
-        }, { once: true });
-
-        // Yapboz
-        const board = document.getElementById('puzzle-board');
-        let selected = null;
-        for(let i=0; i<9; i++) {
-            let p = document.createElement('div');
-            p.className = 'puzzle-piece';
-            p.style.backgroundPosition = `-${(i%3)*100}px -${Math.floor(i/3)*100}px`;
-            p.onclick = function() {
-                if(!selected) { selected = this; this.classList.add('selected'); }
-                else {
-                    let temp = selected.style.backgroundPosition;
-                    selected.style.backgroundPosition = this.style.backgroundPosition;
-                    this.style.backgroundPosition = temp;
-                    selected.classList.remove('selected');
-                    selected = null;
-                }
-            };
-            board.appendChild(p);
-        }
-    </script>
+</div>
 </body>
 </html>
