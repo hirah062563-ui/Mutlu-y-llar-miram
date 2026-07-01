@@ -35,31 +35,30 @@
 
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--altin); text-align: center; margin-top: 40px;}
 
-        /* SİNEMATİK GİRİŞ EKRANI */
-        #intro-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 2s ease;
-        }
-        .play-btn {
-            background: transparent;
-            border: 2px solid var(--altin);
-            color: var(--altin);
-            font-family: 'Cinzel', serif;
-            font-size: 24px;
-            padding: 15px 40px;
-            cursor: pointer;
-            border-radius: 5px;
-            letter-spacing: 3px;
-            transition: all 0.5s;
-        }
-        .play-btn:active { background: var(--altin); color: #000; }
+        // SİNEMATİK GİRİŞ
+        function startExperience() {
+            // Önce siteyi görünür yap
+            let main = document.getElementById('main-content');
+            main.style.display = 'block';
+            
+            // Ekranı gizle
+            document.getElementById('intro-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-screen').style.display = 'none';
+                main.style.opacity = '1';
+            }, 500);
+
+            // Müzik çalmayı denetle (hata verirse siteyi kitlemesin)
+            try {
+                let music = document.getElementById('bg-music');
+                music.play().catch(error => {
+                    console.log("Tarayıcı müziğe izin vermedi veya dosya eksik:", error);
+                });
+            } catch(e) {
+                console.log("Müzik oynatıcı bulunamadı.");
+            }
+                }
+                    
 
         /* ANA İÇERİK */
         #main-content {
