@@ -2,267 +2,92 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ben Senden Vazgeçmem</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@500;700&display=swap');
+        :root { --bordo: #4a0414; --altin: #d4af37; }
+        body { background-color: var(--bordo); color: #f4e7d3; font-family: 'Georgia', serif; margin: 0; padding: 20px; }
+        h2 { color: var(--altin); text-align: center; }
         
-        :root {
-            --bordo: #4a0414;
-            --altin: #d4af37;
-            --koyu-bordo: #2d020c;
-        }
-
-        body {
-            background-color: var(--bordo);
-            color: #f4e7d3;
-            font-family: 'Playfair Display', serif;
-            margin: 0;
-            padding: 20px 0;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.3;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--altin); text-align: center; margin-top: 40px;}
-
-        /* MÜZİK ÇALAR */
-        .music-player { text-align: center; margin: 20px 0; }
-
         /* GÜN SAYACI */
-        .counter-box {
-            border: 1px solid var(--altin);
-            padding: 20px;
-            text-align: center;
-            margin: 30px auto;
-            max-width: 300px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
-        .counter-box span { font-size: 32px; font-weight: bold; color: var(--altin); }
-
-        /* YATAY KAYDIRMALI GALERİ */
-        .media-slider {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 30px;
-            padding: 40px 20px;
-            margin: 20px 0;
-        }
-        .media-slider::-webkit-scrollbar { display: none; }
+        .counter-box { border: 2px solid var(--altin); padding: 20px; text-align: center; margin: 20px auto; max-width: 300px; }
         
-        .film-frame {
-            background: #111;
-            padding: 15px 15px 45px 15px;
-            border: 1px solid #333;
-            box-shadow: 2px 2px 15px rgba(0,0,0,0.8);
-            position: relative;
-            scroll-snap-align: center;
-            flex-shrink: 0;
-        }
-        .film-frame::after {
-            content: "♥";
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            left: 0;
-            text-align: center;
-            color: var(--altin);
-            font-size: 20px;
-        }
-        .foto-3-4 { width: 270px; height: 360px; object-fit: cover; }
-        .video-16-9 { width: 320px; height: 180px; object-fit: cover; background: #000; }
+        /* FOTO GALERİ */
+        .foto-slider { display: flex; overflow-x: auto; gap: 10px; padding: 20px 0; }
+        .foto-slider img { height: 300px; border: 2px solid var(--altin); }
 
-        /* YAPBOZ VE DİĞERLERİ */
-        .puzzle-container { margin: 60px auto; text-align: center; padding: 0 20px;}
-        #puzzle-board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 2px;
-            margin: 0 auto;
-            width: 304px;
-            background: var(--altin);
-            padding: 2px;
-        }
-        .puzzle-piece { width: 100px; height: 100px; background-size: 300px 300px; cursor: pointer; }
-        .selected-piece { filter: brightness(1.5); }
+        /* YAPBOZ */
+        .puzzle-board { display: grid; grid-template-columns: repeat(3, 100px); gap: 2px; margin: 20px auto; width: 300px; }
+        .puzzle-piece { width: 100px; height: 100px; background-size: 300px 300px; cursor: pointer; border: 1px solid #000; }
 
-        .vinyl-container { text-align: center; margin: 80px 0; }
-        .vinyl { width: 150px; height: 150px; background: #111; border-radius: 50%; margin: 0 auto; border: 4px solid #333; animation: spin 4s linear infinite; }
+        /* VİDEO */
+        .video-container { text-align: center; margin: 20px 0; }
+        video { width: 100%; max-width: 400px; border: 2px solid var(--altin); }
+
+        /* PLAK VE SÖZLER */
+        .vinyl { width: 150px; height: 150px; background: black; border-radius: 50%; margin: 20px auto; animation: spin 4s linear infinite; border: 10px solid #333; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .lyrics { margin-top: 20px; font-style: italic; color: #f4e7d3; }
+        .lyrics { text-align: center; font-style: italic; margin-top: 10px; line-height: 1.6; }
 
-        .wine-section { text-align: center; margin: 80px 20px; }
-        .poem-content { display: none; margin-top: 20px; padding: 20px; border: 1px solid var(--altin); background: rgba(0,0,0,0.2); white-space: pre-line; }
-
-        .quotes-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 20px; margin: 60px 0; }
-        .quote-card { min-width: 280px; background: var(--koyu-bordo); border: 1px solid var(--altin); padding: 30px 20px; scroll-snap-align: center; }
-
-        .maze-container { text-align: center; margin: 60px auto; }
-        #maze { display: grid; grid-template-columns: repeat(5, 60px); grid-template-rows: repeat(5, 60px); gap: 2px; margin: 0 auto; width: 310px; background: #000; }
-        .maze-cell { background: var(--koyu-bordo); width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; }
-        .wall { background: #000; }
-        .maze-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--altin); }
-        .maze-controls button { background: var(--altin); border: none; padding: 10px 20px; margin: 5px; }
-
-        .locket-section { text-align: center; margin: 100px 0; display: flex; justify-content: center;}
-        .locket { width: 150px; height: 150px; position: relative; cursor: pointer; perspective: 1000px; }
-        .locket-half { width: 50%; height: 100%; position: absolute; top: 0; background-color: var(--altin); background-size: cover; transition: transform 1s; transform-style: preserve-3d; }
-        .left-half { left: 0; transform-origin: left center; border-radius: 150px 0 0 150px; background-image: url('IMG_20260701_205240.jpg'); }
-        .right-half { right: 0; transform-origin: right center; border-radius: 0 150px 150px 0; background-image: url('IMG_20260701_205134.jpg'); }
-        .locket.open .left-half { transform: rotateY(-180deg); }
-        .locket.open .right-half { transform: rotateY(180deg); }
+        /* ŞARAP VE ŞİİR */
+        details { border: 1px solid var(--altin); padding: 10px; margin: 20px auto; max-width: 400px; cursor: pointer; }
+        
+        /* DAİRE KOLYE */
+        .locket { width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; position: relative; overflow: hidden; cursor: pointer; border: 3px solid var(--altin); }
+        .locket img { width: 150px; height: 150px; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <div class="music-player">
-        <audio controls>
-            <source src="sarki.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-
-    <h2>Bizim Hikayemiz</h2>
+    <h2 id="baslik">Bizim Hikayemiz</h2>
     <div class="counter-box">
-        <div>Tam</div>
-        <span id="days-counter">0</span>
-        <div>gündür hayatımdasın...</div>
+        <span id="days">0</span> gündür beraberiz...
     </div>
 
-    <div class="media-slider">
-        <div class="film-frame"><img src="IMG_20260701_211244.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205730.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205424.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205424.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205258.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205332.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205240.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205225.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205204.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205150.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205134.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205119.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205110.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205054.jpg" class="foto-3-4"></div>
-        <div class="film-frame"><img src="IMG_20260701_205037.jpg" class="foto-3-4"></div>
+    <div class="foto-slider">
+        <img src="IMG_20260701_211244.jpg">
+        <img src="IMG_20260701_205730.jpg">
+        <img src="IMG_20260701_205424.jpg">
     </div>
 
-    <div class="puzzle-container">
-        <h2>Bizi Birleştir</h2>
-        <div id="puzzle-board"></div>
+    <h2 style="font-size: 18px;">Bizi Birleştir</h2>
+    <div class="puzzle-board" id="puzzle"></div>
+
+    <div class="video-container">
+        <video controls src="VID_20260701_205618.mp4"></video>
     </div>
 
-    <div class="media-slider">
-        <div class="film-frame"><video src="VID_20260701_205618.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204945.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204911.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204729.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204642.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204520.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204416.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204301.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204221.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204140.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_203914.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204107.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_204026.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_203848.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_203743.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID_20260701_203635.mp4" class="video-16-9" controls></video></div>
-        <div class="film-frame"><video src="VID-20250920-WA0101.mp4" class="video-16-9" controls></video></div>
+    <div class="vinyl"></div>
+    <div class="lyrics">
+        Ben senden vazgeçmem<br>Işıkları söndürseler bile<br>Korkuma yenilmem<br>Ben sensiz pes etmem
     </div>
 
-    <div class="maze-container">
-        <h2>Bana Ulaş</h2>
-        <div id="maze"></div>
-        <div class="maze-controls">
-            <button onclick="movePlayer(0, -1)">↑</button><br>
-            <button onclick="movePlayer(-1, 0)">←</button>
-            <button onclick="movePlayer(0, 1)">↓</button>
-            <button onclick="movePlayer(1, 0)">→</button>
-        </div>
-    </div>
+    <details>
+        <summary style="font-size: 30px; text-align: center;">🍷</summary>
+        <p style="white-space: pre-line;">
+            Maruzatım odur ki; en iyi bir dostsun
+            Dağların doruğunda bir çiçek kadar iyi
+            Sen karanlıkta yüzümüzü ağartan ışık...
+        </p>
+    </details>
 
-    <div class="vinyl-container">
-        <div class="vinyl"></div>
-        <div class="lyrics">Ben senden vazgeçmem...</div>
-    </div>
-
-    <div class="wine-section" onclick="document.getElementById('poems').style.display='block'">
-        <div style="font-size: 50px;">🍷</div>
-        <div class="poem-content" id="poems">
-            (Şiirler burada açılacak...)
-        </div>
-    </div>
-
-    <div class="locket-section">
-        <div class="locket" onclick="this.classList.toggle('open')">
-            <div class="locket-half left-half"></div>
-            <div class="locket-half right-half"></div>
-        </div>
+    <div class="locket" onclick="this.innerHTML='<img src=\'IMG_20260701_205240.jpg\'>'">
+        <div style="text-align: center; padding-top: 50px;">TIKLA</div>
     </div>
 
     <script>
-        const tanismaTarihi = new Date('2022-09-17'); 
-        const fark = Math.floor((new Date() - tanismaTarihi) / (1000 * 60 * 60 * 24));
-        document.getElementById('days-counter').innerText = fark;
+        // GÜN SAYACI
+        const date = Math.floor((new Date() - new Date('2022-09-17')) / (1000 * 60 * 60 * 24));
+        document.getElementById('days').innerText = date;
 
-        // YAPBOZ VE DİĞER FONKSİYONLAR AYNI KALDI
-        const puzzleBoard = document.getElementById('puzzle-board');
-        let selectedPiece = null;
-        let puzzleImgUrl = 'IMG_20260701_211244.jpg'; 
-        let positions = [0,1,2,3,4,5,6,7,8].sort(() => Math.random() - 0.5);
-
-        positions.forEach((pos) => {
-            let piece = document.createElement('div');
-            piece.className = 'puzzle-piece';
-            piece.style.backgroundImage = `url(${puzzleImgUrl})`;
-            piece.style.backgroundPosition = `${(pos % 3) * 33.33}% ${Math.floor(pos / 3) * 33.33}%`;
-            piece.onclick = function() {
-                if(!selectedPiece) { selectedPiece = this; this.classList.add('selected-piece'); }
-                else {
-                    let tempBg = selectedPiece.style.backgroundPosition;
-                    selectedPiece.style.backgroundPosition = this.style.backgroundPosition;
-                    this.style.backgroundPosition = tempBg;
-                    selectedPiece.classList.remove('selected-piece');
-                    selectedPiece = null;
-                }
-            };
-            puzzleBoard.appendChild(piece);
-        });
-
-        // LABİRENT
-        const mazeContainer = document.getElementById('maze');
-        let playerPos = {x: 0, y: 0};
-        function drawMaze() {
-            mazeContainer.innerHTML = '';
-            for(let y = 0; y < 5; y++) {
-                for(let x = 0; x < 5; x++) {
-                    let cell = document.createElement('div');
-                    cell.className = 'maze-cell';
-                    if(x === playerPos.x && y === playerPos.y) cell.innerHTML = '<img src="IMG_20260701_205240.jpg" class="maze-img">';
-                    else if(x === 4 && y === 4) cell.innerHTML = '<img src="IMG_20260701_205730.jpg" class="maze-img">';
-                    mazeContainer.appendChild(cell);
-                }
-            }
+        // YAPBOZ
+        const puzzle = document.getElementById('puzzle');
+        for(let i=0; i<9; i++) {
+            let div = document.createElement('div');
+            div.className = 'puzzle-piece';
+            div.style.backgroundImage = 'url(IMG_20260701_211244.jpg)';
+            div.style.backgroundPosition = `-${(i%3)*100}px -${Math.floor(i/3)*100}px`;
+            puzzle.appendChild(div);
         }
-        function movePlayer(dx, dy) {
-            playerPos.x += dx; playerPos.y += dy;
-            drawMaze();
-        }
-        drawMaze();
     </script>
 </body>
-                                                                                        </html>
-            
+</html>
