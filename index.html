@@ -57,7 +57,18 @@ body{
         transform:scale(1);
     }
 }
+<section class="cinema">
 
+    <video id="cinemaPlayer"
+           autoplay
+           muted
+           playsinline>
+    </video>
+<audio id="music" loop>
+    <source src="sarki.mp3">
+</audio>
+    
+</section>
 /* sayaç */
 .counter{
     width:320px;
@@ -237,6 +248,31 @@ body{
         visibility:hidden;
     }
     }
+    .cinema{
+    width:100%;
+    max-width:1200px;
+    margin:50px auto;
+}
+
+#cinemaPlayer{
+    width:100%;
+    aspect-ratio:16/9;
+    object-fit:cover;
+    border-radius:20px;
+    box-shadow:0 0 40px rgba(255,0,80,.4);
+    transition:opacity 1.2s;
+    }
+    .maze-section{
+    text-align:center;
+    padding:50px;
+}
+
+#maze{
+    background:#1b0008;
+    border:3px solid #b3002d;
+    border-radius:20px;
+    box-shadow:0 0 30px rgba(255,0,100,.4);
+}
 </style>
 </head>
 
@@ -255,7 +291,7 @@ body{
 </div>
 
 <!-- fotoğraflar -->
-<h2 style="padding:20px">📷 Fotoğraflarımız</h2>
+<h2 style="padding:20px">📷 </h2>
 
 <div class="gallery">
 
@@ -277,7 +313,7 @@ body{
 </div>
 
 <!-- videolar -->
-<h2 style="padding:20px">🎬 Videolarımız</h2>
+<h2 style="padding:20px">🎬 Biz</h2>
 
 <div class="videos">
 
@@ -468,7 +504,16 @@ right:10px;">
 <p style="margin-top:20px">
 Başlangıçtan sana ulaşmak ❤️
 </p>
+<section class="maze-section">
 
+    <h2>🌀 Sana Ulaşmak</h2>
+
+    <canvas id="maze" width="420" height="420"></canvas>
+
+    <p id="mazeText">
+        Yön tuşlarıyla bana ulaş ❤️
+    </p>
+</section>
 </section>
 
 
@@ -529,7 +574,7 @@ object-fit:cover;">
 <script>
 
 // gün sayacı
-const start = new Date("2025-09-17");
+const start = new Date("2022-09-17");
 const today = new Date();
 
 const diff =
@@ -573,5 +618,177 @@ function togglePoems(){
     </div>
 
 </div>
+<script>
+    const music=document.getElementById("music");
+
+document.body.addEventListener(
+    "click",
+    ()=>{
+        music.play();
+    },
+    {once:true}
+);
+    
+    const videos=[
+"VID_20260701_205618.mp4",
+"VID_20260701_204945.mp4",
+"VID_20260701_204911.mp4",
+"VID_20260701_204729.mp4",
+"VID_20260701_204642.mp4",
+"VID_20260701_204520.mp4",
+"VID_20260701_204416.mp4",
+"VID_20260701_204301.mp4",
+"VID_20260701_204221.mp4",
+"VID_20260701_204140.mp4",
+"VID_20260701_203914.mp4",
+"VID_20260701_204107.mp4",
+"VID_20260701_204026.mp4",
+"VID_20260701_203848.mp4",
+"VID_20260701_203743.mp4",
+"VID_20260701_203635.mp4",
+"VID-20250920-WA0101.mp4"
+];
+
+const player=document.getElementById("cinemaPlayer");
+let current=0;
+
+function playNext(){
+    player.style.opacity=0;
+
+    setTimeout(()=>{
+        player.src=videos[current];
+        player.play();
+        player.style.opacity=1;
+
+        current++;
+        if(current>=videos.length)
+            current=0;
+    },800);
+}
+
+player.addEventListener("ended",playNext);
+
+playNext();
+    const canvas = document.getElementById("maze");
+const ctx = canvas.getContext("2d");
+
+const size = 60;
+
+const maze = [
+[0,0,0,1,0,0,0],
+[1,1,0,1,0,1,0],
+[0,0,0,0,0,1,0],
+[0,1,1,1,0,1,0],
+[0,0,0,1,0,0,0],
+[0,1,0,0,0,1,0],
+[0,1,1,1,1,1,0]
+];
+
+let player = {
+    x:0,
+    y:0
+};
+
+const finish = {
+    x:6,
+    y:6
+};
+
+const startImg = new Image();
+startImg.src =
+"IMG_20260701_205240.jpg";
+
+const finishImg = new Image();
+finishImg.src =
+"IMG_20260701_205730.jpg";
+
+function draw(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    for(let y=0;y<7;y++){
+
+        for(let x=0;x<7;x++){
+
+            if(maze[y][x]===1){
+
+                ctx.fillStyle="#5a001a";
+
+                ctx.fillRect(
+                    x*size,
+                    y*size,
+                    size,
+                    size
+                );
+            }
+
+        }
+
+    }
+
+    ctx.drawImage(
+        finishImg,
+        finish.x*size+5,
+        finish.y*size+5,
+        50,
+        50
+    );
+
+    ctx.drawImage(
+        startImg,
+        player.x*size+5,
+        player.y*size+5,
+        50,
+        50
+    );
+
+}
+
+document.addEventListener(
+"keydown",
+e=>{
+
+    let nx=player.x;
+    let ny=player.y;
+
+    if(e.key==="ArrowUp") ny--;
+    if(e.key==="ArrowDown") ny++;
+    if(e.key==="ArrowLeft") nx--;
+    if(e.key==="ArrowRight") nx++;
+
+    if(
+        nx>=0 &&
+        nx<7 &&
+        ny>=0 &&
+        ny<7 &&
+        maze[ny][nx]===0
+    ){
+        player.x=nx;
+        player.y=ny;
+    }
+
+    draw();
+
+    if(
+        player.x===finish.x &&
+        player.y===finish.y
+    ){
+        document
+        .getElementById(
+            "mazeText"
+        )
+        .innerHTML=
+        "❤️ Sana ulaştım ❤️";
+    }
+
+});
+
+finishImg.onload=draw;
+</script>
 </body>
 </html>
